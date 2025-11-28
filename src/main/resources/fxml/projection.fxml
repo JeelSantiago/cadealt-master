@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.DropShadow?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.cadealt.controller.ProjectionController"
+           fx:id="rootPane"
+           style="-fx-background-color: #000000;">
+
+    <!-- Imagem de fundo (opcional) -->
+    <StackPane fx:id="backgroundPane" style="-fx-background-color: #000000;"/>
+
+    <!-- Conteúdo principal -->
+    <VBox alignment="CENTER" spacing="40">
+        <!-- Texto principal -->
+        <Label fx:id="contentLabel"
+               text=""
+               wrapText="true"
+               textAlignment="CENTER"
+               style="-fx-text-fill: white; -fx-font-size: 60px; -fx-font-weight: bold; -fx-padding: 60;"
+               maxWidth="1800">
+            <effect>
+                <DropShadow offsetX="0" offsetY="0" radius="12" color="#000000"/>
+            </effect>
+        </Label>
+
+        <!-- Referência (hino/versículo - NÃO aparece para louvores) -->
+        <Label fx:id="referenciaLabel"
+               text=""
+               textAlignment="CENTER"
+               style="-fx-text-fill: white; -fx-font-size: 32px; -fx-font-style: italic;"
+               maxWidth="1600">
+            <effect>
+                <DropShadow offsetX="0" offsetY="0" radius="8" color="#000000"/>
+            </effect>
+        </Label>
+    </VBox>
+
+</StackPane>
