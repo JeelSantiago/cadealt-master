@@ -32,16 +32,18 @@ public class CadealtMaster extends Application {
         try {
             // Carrega o FXML do layout principal
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(CadealtMaster.class.getResource("/fxml/MainView.fxml"));
+            loader.setLocation(CadealtMaster.class.getResource("/fxml/main.fxml"));
             rootLayout = loader.load();
 
-            // Cria a cena
-            Scene scene = new Scene(rootLayout, 1024, 768);
+            // Cria a cena com tamanho otimizado para 3 colunas
+            Scene scene = new Scene(rootLayout, 1400, 900);
 
-            // Adiciona CSS
-            scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
+            // Adiciona CSS dark mode
+            scene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
 
             primaryStage.setScene(scene);
+            primaryStage.setMinWidth(1200);
+            primaryStage.setMinHeight(700);
             primaryStage.show();
 
         } catch (Exception e) {
