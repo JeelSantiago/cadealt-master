@@ -1,0 +1,101 @@
+/* ===== CADEALT MASTER - Estilos Principais ===== */
+
+/* Estilos gerais */
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* MenuBar */
+.menu-bar {
+    -fx-background-color: #2c3e50;
+}
+
+.menu-bar .label {
+    -fx-text-fill: white;
+}
+
+.menu-bar .menu-button:hover {
+    -fx-background-color: #34495e;
+}
+
+/* Botões */
+.button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.button:pressed {
+    -fx-background-color: #21618c;
+}
+
+/* ListView */
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 3;
+}
+
+.list-view .list-cell {
+    -fx-padding: 8px;
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #ecf0f1;
+}
+
+/* TextField */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 3;
+    -fx-padding: 5px;
+}
+
+.text-field:focused {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #2c3e50;
+}
+
+/* Preview Pane */
+#previewPane {
+    -fx-background-color: #000000;
+}
+
+#previewLabel {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Status Bar */
+.status-bar {
+    -fx-background-color: #ecf0f1;
+    -fx-padding: 5px;
+}
+
+/* Split Pane */
+.split-pane {
+    -fx-background-color: #ecf0f1;
+}
+
+.split-pane-divider {
+    -fx-background-color: #bdc3c7;
+}

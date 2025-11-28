@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.cadealt.controller.MainController"
+            prefHeight="768.0" prefWidth="1024.0">
+
+    <!-- Menu Superior -->
+    <top>
+        <MenuBar>
+            <Menu text="Arquivo">
+                <MenuItem text="Novo" onAction="#handleNew"/>
+                <MenuItem text="Abrir" onAction="#handleOpen"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Sair" onAction="#handleExit"/>
+            </Menu>
+            <Menu text="Editar">
+                <MenuItem text="Adicionar Música" onAction="#handleAddSong"/>
+                <MenuItem text="Adicionar Versículo" onAction="#handleAddVerse"/>
+            </Menu>
+            <Menu text="Projeção">
+                <MenuItem text="Iniciar Projeção" onAction="#handleStartProjection"/>
+                <MenuItem text="Parar Projeção" onAction="#handleStopProjection"/>
+            </Menu>
+            <Menu text="Ajuda">
+                <MenuItem text="Sobre" onAction="#handleAbout"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <!-- Conteúdo Central -->
+    <center>
+        <SplitPane dividerPositions="0.3">
+            <!-- Painel Esquerdo - Lista de Músicas -->
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <Label text="Biblioteca de Músicas" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <TextField fx:id="searchField" promptText="Buscar músicas..."/>
+
+                <ListView fx:id="songListView" VBox.vgrow="ALWAYS"/>
+
+                <HBox spacing="10">
+                    <Button text="Adicionar" onAction="#handleAddSong" prefWidth="100"/>
+                    <Button text="Editar" onAction="#handleEditSong" prefWidth="100"/>
+                    <Button text="Remover" onAction="#handleRemoveSong" prefWidth="100"/>
+                </HBox>
+            </VBox>
+
+            <!-- Painel Central - Preview e Controles -->
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <Label text="Preview da Projeção" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <!-- Área de Preview -->
+                <StackPane fx:id="previewPane"
+                          style="-fx-background-color: black; -fx-border-color: gray;"
+                          VBox.vgrow="ALWAYS">
+                    <Label fx:id="previewLabel"
+                           text="Nenhum conteúdo selecionado"
+                           style="-fx-text-fill: white; -fx-font-size: 24px;"
+                           textAlignment="CENTER"/>
+                </StackPane>
+
+                <!-- Controles de Projeção -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Button text="◀" onAction="#handlePrevious" prefWidth="60"/>
+                    <Button text="Projetar" onAction="#handleProject" prefWidth="100"/>
+                    <Button text="▶" onAction="#handleNext" prefWidth="60"/>
+                    <Button text="Limpar" onAction="#handleClear" prefWidth="100"/>
+                </HBox>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <!-- Rodapé -->
+    <bottom>
+        <HBox spacing="10" style="-fx-padding: 5; -fx-background-color: #f0f0f0;">
+            <Label fx:id="statusLabel" text="Pronto"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="connectionLabel" text="Banco de dados: Conectado"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
