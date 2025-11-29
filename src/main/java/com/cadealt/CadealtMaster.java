@@ -39,53 +39,80 @@ public class CadealtMaster extends Application {
         this.primaryStage.setTitle("CADEALT MASTER - Sistema de Projeção");
 
         System.out.println("=== Iniciando CADEALT MASTER ===");
+        System.out.println("JavaFX Version: " + System.getProperty("javafx.version"));
+        System.out.println("Java Version: " + System.getProperty("java.version"));
 
         // ============================================================
-        // PASSO 1: CARREGAR E MOSTRAR TELA DE CONTROLE
+        // PASSO 1: CARREGAR E MOSTRAR TELA DE CONTROLE (SEMPRE PRIMEIRO!)
         // ============================================================
-        initRootLayout();
+        boolean controlScreenLoaded = initRootLayout();
+
+        if (!controlScreenLoaded) {
+            System.err.println("ERRO CRÍTICO: Tela de controle NÃO foi carregada!");
+            System.err.println("Abortando inicialização...");
+            Platform.exit();
+            return;
+        }
 
         // ============================================================
         // PASSO 2: VERIFICAR MONITORES (DEPOIS que a tela aparecer)
         // ============================================================
-        // Usar Platform.runLater para garantir que a tela de controle apareça primeiro
-        Platform.runLater(this::checkSecondaryMonitor);
+        // Usar Platform.runLater com DELAY para garantir que a tela de controle apareça primeiro
+        Platform.runLater(() -> {
+            System.out.println("\n=== Verificação de monitores (após tela de controle estar visível) ===");
+            checkSecondaryMonitor();
+        });
     }
 
     /**
      * Inicializa o layout principal da aplicação (janela de controle)
      * ESTA É A PRIMEIRA JANELA - SEMPRE APARECE
+     * @return true se a tela foi carregada com sucesso, false caso contrário
      */
-    private void initRootLayout() {
+    private boolean initRootLayout() {
         try {
-            System.out.println("Carregando tela de controle (main.fxml)...");
+            System.out.println("\n>>> PASSO 1: Carregando tela de controle (main.fxml)...");
 
             // Carrega o FXML do layout principal
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(CadealtMaster.class.getResource("/fxml/main.fxml"));
+
+            System.out.println("    - FXML path: " + CadealtMaster.class.getResource("/fxml/main.fxml"));
+
             rootLayout = loader.load();
+            System.out.println("    ✓ FXML carregado com sucesso");
 
             // Obter controller
             mainViewController = loader.getController();
+            System.out.println("    ✓ Controller obtido: " + (mainViewController != null ? "OK" : "FALHOU"));
 
             // Cria a cena com tamanho otimizado para 3 colunas
             Scene scene = new Scene(rootLayout, 1400, 900);
+            System.out.println("    ✓ Scene criada (1400x900)");
 
-            // Adiciona CSS dark mode
-            scene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
+            // Adiciona CSS dark mode (com tratamento de erro)
+            try {
+                String cssPath = getClass().getResource("/css/main.css").toExternalForm();
+                scene.getStylesheets().add(cssPath);
+                System.out.println("    ✓ CSS aplicado: " + cssPath);
+            } catch (Exception cssError) {
+                System.err.println("    ⚠ Aviso: Erro ao carregar CSS (continuando sem estilo): " + cssError.getMessage());
+            }
 
             primaryStage.setScene(scene);
             primaryStage.setMinWidth(1200);
             primaryStage.setMinHeight(700);
+            System.out.println("    ✓ Scene aplicada ao Stage");
 
             // Posicionar no monitor primário
             Rectangle2D primaryBounds = Screen.getPrimary().getVisualBounds();
             primaryStage.setX(primaryBounds.getMinX());
             primaryStage.setY(primaryBounds.getMinY());
+            System.out.println("    ✓ Posicionado no monitor primário: " + primaryBounds);
 
             // Ao fechar a janela principal, fechar tudo
             primaryStage.setOnCloseRequest(event -> {
-                System.out.println("Fechando aplicação...");
+                System.out.println("\n=== Fechando aplicação... ===");
                 if (projectionStage != null) {
                     projectionStage.close();
                 }
@@ -96,11 +123,23 @@ public class CadealtMaster extends Application {
             // MOSTRAR A TELA DE CONTROLE (CRÍTICO!)
             // ============================================================
             primaryStage.show();
-            System.out.println("✓ Tela de controle aberta e VISÍVEL");
+            primaryStage.toFront();
+            primaryStage.requestFocus();
+
+            System.out.println("    ✓✓✓ TELA DE CONTROLE ABERTA E VISÍVEL ✓✓✓");
+            System.out.println("    - Stage showing: " + primaryStage.isShowing());
+            System.out.println("    - Stage focused: " + primaryStage.isFocused());
+            System.out.println(">>> PASSO 1: CONCLUÍDO COM SUCESSO\n");
+
+            return true;
 
         } catch (Exception e) {
-            System.err.println("ERRO CRÍTICO ao carregar tela de controle: " + e.getMessage());
+            System.err.println("\n!!! ERRO CRÍTICO ao carregar tela de controle !!!");
+            System.err.println("Mensagem: " + e.getMessage());
+            System.err.println("Tipo: " + e.getClass().getName());
+            System.err.println("Stack trace:");
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -112,15 +151,26 @@ public class CadealtMaster extends Application {
     private void checkSecondaryMonitor() {
         ObservableList<Screen> screens = Screen.getScreens();
 
-        System.out.println("Verificando monitores conectados...");
-        System.out.println("Total de monitores: " + screens.size());
+        System.out.println(">>> PASSO 2: Verificando monitores conectados...");
+        System.out.println("    - Total de monitores detectados: " + screens.size());
+
+        // Listar todos os monitores
+        for (int i = 0; i < screens.size(); i++) {
+            Screen screen = screens.get(i);
+            Rectangle2D bounds = screen.getBounds();
+            System.out.println("    - Monitor " + (i + 1) + ": " +
+                             (int)bounds.getWidth() + "x" + (int)bounds.getHeight() +
+                             " @ (" + (int)bounds.getMinX() + ", " + (int)bounds.getMinY() + ")" +
+                             (screen == Screen.getPrimary() ? " [PRIMÁRIO]" : ""));
+        }
 
         if (screens.size() < 2) {
             // ========================================
             // APENAS 1 MONITOR - NÃO ABRIR PROJEÇÃO
             // ========================================
-            System.out.println("⚠ Apenas 1 monitor detectado");
-            System.out.println("✗ Janela de projeção NÃO será criada");
+            System.out.println("\n    ⚠ CENÁRIO: Apenas 1 monitor detectado");
+            System.out.println("    ✗ Janela de projeção NÃO será criada");
+            System.out.println("    ✓ Tela de controle permanece funcionando");
 
             // Mostrar Alert informativo
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -140,16 +190,20 @@ public class CadealtMaster extends Application {
             // Desabilitar botões de projeção no MainViewController
             if (mainViewController != null) {
                 mainViewController.disableProjectionMode();
+                System.out.println("    ✓ Botões de projeção desabilitados");
             }
 
-            System.out.println("✓ Aplicação iniciada SEM projeção (modo controle apenas)");
+            System.out.println(">>> PASSO 2: CONCLUÍDO - Aplicação iniciada SEM projeção (modo controle apenas)\n");
 
         } else {
             // ========================================
             // 2+ MONITORES - ABRIR JANELA DE PROJEÇÃO
             // ========================================
-            System.out.println("✓ Monitor secundário detectado");
+            System.out.println("\n    ✓ CENÁRIO: Monitor secundário detectado");
             Screen secondaryScreen = screens.get(1); // Monitor secundário
+            Rectangle2D secondaryBounds = secondaryScreen.getBounds();
+            System.out.println("    - Monitor secundário selecionado: " +
+                             (int)secondaryBounds.getWidth() + "x" + (int)secondaryBounds.getHeight());
 
             openProjectionWindow(secondaryScreen);
         }
@@ -161,17 +215,19 @@ public class CadealtMaster extends Application {
      */
     private void openProjectionWindow(Screen targetScreen) {
         try {
-            System.out.println("Abrindo janela de projeção no monitor secundário...");
+            System.out.println("\n    >>> Abrindo janela de projeção...");
 
             // Carrega FXML da projeção
             FXMLLoader projectionLoader = new FXMLLoader();
             projectionLoader.setLocation(CadealtMaster.class.getResource("/fxml/projection.fxml"));
             StackPane projectionRoot = projectionLoader.load();
             projectionController = projectionLoader.getController();
+            System.out.println("        ✓ FXML de projeção carregado");
 
             // Passa referência do controller de projeção para o MainViewController
             if (mainViewController != null) {
                 mainViewController.setProjectionController(projectionController);
+                System.out.println("        ✓ Controller de projeção vinculado ao controller principal");
             }
 
             // Cria Stage da projeção
@@ -185,6 +241,9 @@ public class CadealtMaster extends Application {
             projectionStage.setY(bounds.getMinY());
             projectionStage.setWidth(bounds.getWidth());
             projectionStage.setHeight(bounds.getHeight());
+            System.out.println("        ✓ Stage de projeção criado e posicionado: " +
+                             (int)bounds.getMinX() + ", " + (int)bounds.getMinY() +
+                             " (" + (int)bounds.getWidth() + "x" + (int)bounds.getHeight() + ")");
 
             // Criar cena
             Scene projectionScene = new Scene(projectionRoot);
@@ -218,11 +277,18 @@ public class CadealtMaster extends Application {
             // Mostrar janela
             projectionStage.show();
 
-            System.out.println("✓ Janela de projeção aberta em fullscreen no monitor secundário");
-            System.out.println("=== CADEALT MASTER iniciado com SUCESSO (modo completo) ===");
+            System.out.println("        ✓✓✓ JANELA DE PROJEÇÃO ABERTA EM FULLSCREEN ✓✓✓");
+            System.out.println(">>> PASSO 2: CONCLUÍDO - Janela de projeção aberta no monitor secundário\n");
+            System.out.println("=================================================================");
+            System.out.println("    CADEALT MASTER INICIADO COM SUCESSO (MODO COMPLETO)");
+            System.out.println("    - Tela de controle: ATIVA no monitor primário");
+            System.out.println("    - Janela de projeção: ATIVA no monitor secundário");
+            System.out.println("=================================================================\n");
 
         } catch (Exception e) {
-            System.err.println("ERRO ao abrir janela de projeção: " + e.getMessage());
+            System.err.println("\n!!! ERRO ao abrir janela de projeção !!!");
+            System.err.println("Mensagem: " + e.getMessage());
+            System.err.println("Tipo: " + e.getClass().getName());
             e.printStackTrace();
 
             // Se falhar, informar ao usuário
@@ -235,6 +301,7 @@ public class CadealtMaster extends Application {
             // Desabilitar projeção
             if (mainViewController != null) {
                 mainViewController.disableProjectionMode();
+                System.out.println("    ✓ Botões de projeção desabilitados (erro ao abrir janela)");
             }
         }
     }
