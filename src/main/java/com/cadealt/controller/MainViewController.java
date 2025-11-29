@@ -102,34 +102,34 @@ public class MainViewController {
     public void initialize() {
         System.out.println("=== Inicializando MainViewController ===");
 
-        // 1. Inicializar banco de dados
+        // 1. INICIALIZAR CONTROLE DE SLIDES (PRIMEIRO! Antes de setupComponents)
+        currentSlides = new ArrayList<>();
+        currentSlideIndex = 0;
+        currentReferencia = null;
+
+        // 2. Inicializar banco de dados
         DatabaseConnection.initializeDatabase();
 
-        // 2. Inicializar DAOs
+        // 3. Inicializar DAOs
         hinoDAO = new HinoDAO();
         louvorDAO = new LouvorDAO();
         versiculoDAO = new VersiculoDAO();
         historicoDAO = new HistoricoDAO();
 
-        // 3. Inicializar listas
+        // 4. Inicializar listas
         initializeLists();
 
-        // 4. Configurar componentes
+        // 5. Configurar componentes
         setupComponents();
 
-        // 5. Configurar listeners
+        // 6. Configurar listeners
         setupListeners();
 
-        // 6. Iniciar relógio
+        // 7. Iniciar relógio
         startFooterClock();
 
-        // 7. Carregar dados do banco
+        // 8. Carregar dados do banco
         loadDataFromDatabase();
-
-        // 8. Inicializar controle de slides
-        currentSlides = new ArrayList<>();
-        currentSlideIndex = 0;
-        currentReferencia = null;
 
         updateFooterStatus("Sistema Pronto");
         System.out.println("=== MainViewController inicializado com sucesso ===");
@@ -414,7 +414,7 @@ public class MainViewController {
      * Mostra slide atual no preview (e projeta se não estiver no modo CTRL)
      */
     private void showCurrentSlide() {
-        if (currentSlides.isEmpty()) {
+        if (currentSlides == null || currentSlides.isEmpty()) {
             previewLabel.setText("Nenhum conteúdo selecionado");
             btnPrevSlide.setDisable(true);
             btnNextSlide.setDisable(true);
@@ -440,7 +440,7 @@ public class MainViewController {
      * Projeta o slide atual na janela de projeção
      */
     private void projetarSlideAtual() {
-        if (projectionController != null && !currentSlides.isEmpty()) {
+        if (projectionController != null && currentSlides != null && !currentSlides.isEmpty()) {
             String conteudo = currentSlides.get(currentSlideIndex);
             projectionController.mostrarConteudo(conteudo, currentReferencia);
             System.out.println("Slide projetado: " + (currentSlideIndex + 1) + "/" + currentSlides.size());
@@ -451,7 +451,7 @@ public class MainViewController {
      * Atualiza contador de slides
      */
     private void updateSlideCounter() {
-        if (currentSlides.isEmpty()) {
+        if (currentSlides == null || currentSlides.isEmpty()) {
             slideCountLabel.setText("0 / 0");
         } else {
             slideCountLabel.setText((currentSlideIndex + 1) + " / " + currentSlides.size());
@@ -536,7 +536,7 @@ public class MainViewController {
 
     @FXML
     private void handleNextSlide() {
-        if (currentSlideIndex < currentSlides.size() - 1) {
+        if (currentSlides != null && currentSlideIndex < currentSlides.size() - 1) {
             currentSlideIndex++;
             showCurrentSlide();
             updateFooterStatus("Próximo slide");
