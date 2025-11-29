@@ -144,6 +144,50 @@ public class MainViewController {
     }
 
     /**
+     * ============================================================
+     * CORREÇÃO 3: DESABILITAR MODO PROJEÇÃO
+     * ============================================================
+     * Chamado quando não há monitor secundário conectado
+     * Desabilita botões de projeção e atualiza status
+     */
+    public void disableProjectionMode() {
+        System.out.println("Desabilitando modo projeção (sem monitor secundário)...");
+
+        // Desabilitar botões de projeção
+        if (btnProjetar != null) {
+            btnProjetar.setDisable(true);
+            btnProjetar.setTooltip(new Tooltip("Conecte um monitor secundário para usar a projeção"));
+        }
+
+        if (btnTelaPreta != null) {
+            btnTelaPreta.setDisable(true);
+            btnTelaPreta.setTooltip(new Tooltip("Conecte um monitor secundário para usar a projeção"));
+        }
+
+        if (btnFundo != null) {
+            btnFundo.setDisable(true);
+            btnFundo.setTooltip(new Tooltip("Conecte um monitor secundário para usar a projeção"));
+        }
+
+        if (btnAplicarFundo != null) {
+            btnAplicarFundo.setDisable(true);
+            btnAplicarFundo.setTooltip(new Tooltip("Conecte um monitor secundário para usar a projeção"));
+        }
+
+        if (btnEscolherFundo != null) {
+            btnEscolherFundo.setDisable(true);
+        }
+
+        // Atualizar status no rodapé
+        if (footerStatusLabel != null) {
+            footerStatusLabel.setText("⚠️ Monitor secundário não detectado - Projeção desabilitada");
+            footerStatusLabel.setStyle("-fx-text-fill: #fb923c;"); // Laranja para chamar atenção
+        }
+
+        System.out.println("✓ Modo projeção desabilitado");
+    }
+
+    /**
      * Inicializa as listas Observable
      */
     private void initializeLists() {
