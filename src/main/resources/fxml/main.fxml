@@ -89,7 +89,7 @@
                     </Tab>
 
                     <!-- Aba Versículos -->
-                    <Tab text="Versículos" styleClass="biblioteca-tab">
+                    <Tab text="Bíblia" styleClass="biblioteca-tab">
                         <VBox spacing="10">
                             <padding>
                                 <Insets top="10" right="5" bottom="10" left="5"/>

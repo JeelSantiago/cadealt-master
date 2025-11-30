@@ -272,6 +272,18 @@ public class MainViewController {
             }
         });
 
+        // === CLIQUE DUPLO VERSÍCULO ===
+        versiculoListView.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                String selected = versiculoListView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    // Extrair referência (formato: "João 3:16")
+                    versiculoInputField.setText(selected);
+                    handleBuscarVersiculo();
+                }
+            }
+        });
+
         // === CLIQUE DUPLO HISTÓRICO ===
         historicoListView.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
@@ -708,8 +720,18 @@ public class MainViewController {
 
     @FXML
     private void handleAdicionarLouvor() {
-        // TODO: Abrir dialog de adicionar louvor
-        showAlert("Adicionar Louvor", "Funcionalidade em desenvolvimento", Alert.AlertType.INFORMATION);
+        try {
+            com.cadealt.dialog.AdicionarLouvorDialog dialog = new com.cadealt.dialog.AdicionarLouvorDialog();
+            dialog.showAndWait().ifPresent(louvor -> {
+                // Recarregar lista de louvores
+                loadDataFromDatabase();
+                updateFooterStatus("Louvor '" + louvor.getTitulo() + "' adicionado com sucesso!");
+            });
+        } catch (Exception e) {
+            System.err.println("Erro ao abrir dialog de adicionar louvor: " + e.getMessage());
+            e.printStackTrace();
+            showAlert("Erro", "Erro ao abrir dialog: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     // ==================== UTILITÁRIOS ====================
