@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CADEALT MASTER - Sistema de Projeção Inteligente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3B82F6;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --dark-light: #374151;
+            --gray: #6B7280;
+            --gray-light: #D1D5DB;
+            --bg-dark: #111827;
+            --bg-darker: #0F172A;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Header */
+        .header {
+            padding: 60px 0 120px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            color: #10B981;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            text-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+        }
+
+        .tagline {
+            font-size: 20px;
+            color: #9CA3AF;
+            font-weight: 400;
+            margin-bottom: 40px;
+        }
+
+        .hero-description {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, #9CA3AF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #9CA3AF;
+            max-width: 700px;
+            margin: 0 auto 48px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 48px;
+            background: #10B981;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Features Section */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #10B981;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-heading {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 80px;
+            color: white;
+        }
+
+        /* Feature Cards with Screenshots */
+        .feature {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            margin-bottom: 120px;
+        }
+
+        .feature:nth-child(even) {
+            direction: rtl;
+        }
+
+        .feature:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .feature-content {
+            padding: 40px 0;
+        }
+
+        .feature-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .feature-description {
+            font-size: 18px;
+            color: #9CA3AF;
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 16px 0;
+            font-size: 16px;
+            color: #D1D5DB;
+            position: relative;
+            padding-left: 32px;
+        }
+
+        .feature-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #10B981;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .feature-image {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s ease;
+        }
+
+        .feature-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
+        }
+
+        .feature-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin: 100px 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 48px 32px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 56px;
+            font-weight: 800;
+            color: #10B981;
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* CTA Final */
+        .cta-section {
+            text-align: center;
+            padding: 120px 0;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border-radius: 32px;
+            margin: 100px 0;
+        }
+
+        .cta-section h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            color: #9CA3AF;
+            margin-bottom: 48px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 60px 0;
+            color: #6B7280;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Galeria de Projeções */
+        .projections-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin: 80px 0;
+        }
+
+        .projection-card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .projection-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .projection-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Resources Grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 100px;
+        }
+
+        .resource-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(16, 185, 129, 0.5);
+            transform: translateY(-4px);
+        }
+
+        .resource-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .resource-card p {
+            font-size: 14px;
+            color: #9CA3AF;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .feature {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .projections-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .resources-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-description {
+                font-size: 36px;
+            }
+
+            .section-heading {
+                font-size: 32px;
+            }
+
+            .feature-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .projections-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo animate-in">CADEALT MASTER</h1>
+            <p class="tagline animate-in animate-delay-1">Sistema de Projeção para Igrejas</p>
+            <h2 class="hero-description animate-in animate-delay-2">
+                Programa de projeção ideal para sua Igreja
+            </h2>
+            <p class="hero-subtitle animate-in animate-delay-3" style="color: #F59E0B; font-size: 18px; font-weight: 500;">
+                Projete: Bíblia - Louvores - Youtube sem anúncios - Estudos - e muito mais
+            </p>
+            <p class="hero-subtitle animate-in animate-delay-3">
+                Suas Projeções Mais Bonitas - Fácil de Usar - Experimente!
+            </p>
+            <a href="#" class="cta-button animate-in animate-delay-3">Download</a>
+            <p style="color: #6B7280; font-size: 14px; margin-top: 12px;">Para Windows 7, 8, 10 e 11</p>
+        </header>
+
+        <!-- Galeria de Projeções -->
+        <div class="projections-gallery">
+            <div class="projection-card">
+                <img src="/mnt/user-data/uploads/1765318119435_image.png" alt="Projeção 1">
+            </div>
+            <div class="projection-card">
+                <img src="/mnt/user-data/uploads/1765318126552_image.png" alt="Projeção 2">
+            </div>
+            <div class="projection-card">
+                <img src="/mnt/user-data/uploads/1765318133505_image.png" alt="Projeção 3">
+            </div>
+            <div class="projection-card">
+                <img src="/mnt/user-data/uploads/1765318144796_image.png" alt="Projeção 4">
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">600+</div>
+                <div class="stat-label">Hinos da Harpa</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Louvores Personalizados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Gratuito e Completo</div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <section class="section">
+            <div class="section-title">RECURSOS</div>
+            <h2 class="section-heading">Projetar Bíblia e Louvores nunca foi tão fácil!</h2>
+
+            <!-- Vídeo de Demonstração -->
+            <div class="video-container" style="margin-bottom: 100px;">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 24px; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);">
+                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- Cards de Recursos -->
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h3>Pronto para uso</h3>
+                    <p>Já vem com diversos louvores, imagens e vídeos de fundo e a bíblia completa</p>
+                </div>
+                <div class="resource-card">
+                    <h3>Busca letras na Internet</h3>
+                    <p>Busque letras pelo título, trecho da música ou nome do artista</p>
+                </div>
+                <div class="resource-card">
+                    <h3>Imagens e Vídeos</h3>
+                    <p>Baixe imagens e vídeos de fundo, buscando pelo tema, por exemplo: "nuvens"</p>
+                </div>
+                <div class="resource-card">
+                    <h3>Integração com OBS</h3>
+                    <p>Ative legendas personalizáveis para as transmissões de culto ao vivo</p>
+                </div>
+                <div class="resource-card">
+                    <h3>Youtube e Vídeos locais</h3>
+                    <p>Projete vídeos do Youtube sem anúncios</p>
+                </div>
+                <div class="resource-card">
+                    <h3>Retrospectivas</h3>
+                    <p>Crie slides de retrospectivas e comemorações de forma rápida e intuitiva</p>
+                </div>
+                <div class="resource-card">
+                    <h3>Playbacks com letras no telão</h3>
+                    <p>Encontre playbacks buscando pelo nome ou trecho da música</p>
+                </div>
+                <div class="resource-card">
+                    <h3>Projeção de câmeras</h3>
+                    <p>Projete a imagem das câmeras ao vivo como plano de fundo</p>
+                </div>
+            </div>
+
+            <!-- Feature 1: Biblioteca Completa -->
+            <div class="feature">
+                <div class="feature-content">
+                    <h3 class="feature-title">Biblioteca Completa de Hinos</h3>
+                    <p class="feature-description">
+                        Acesse instantaneamente todos os 640 hinos da Harpa Cristã, 
+                        com busca inteligente e navegação rápida.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Busca por número ou título do hino</li>
+                        <li>Autocompletar inteligente enquanto digita</li>
+                        <li>Lista organizada e fácil de navegar</li>
+                        <li>Adicione seus louvores personalizados</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="/mnt/user-data/uploads/1765317903724_image.png" alt="Biblioteca de Hinos">
+                </div>
+            </div>
+
+            <!-- Feature 2: Preview e Controle -->
+            <div class="feature">
+                <div class="feature-content">
+                    <h3 class="feature-title">Preview ao Vivo e Controle Total</h3>
+                    <p class="feature-description">
+                        Visualize exatamente o que será projetado antes de exibir. 
+                        Controle completo com teclado e interface intuitiva.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Preview em tempo real antes de projetar</li>
+                        <li>Navegação com setas do teclado</li>
+                        <li>Controle CTRL para preview sem projetar</li>
+                        <li>Transições suaves entre slides</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="/mnt/user-data/uploads/1765317879369_image.png" alt="Tela de Controle">
+                </div>
+            </div>
+
+            <!-- Feature 3: Projeção Profissional -->
+            <div class="feature">
+                <div class="feature-content">
+                    <h3 class="feature-title">Projeção Limpa e Profissional</h3>
+                    <p class="feature-description">
+                        Letras grandes, bem espaçadas e legíveis. Configurações 
+                        personalizáveis de fonte, tamanho e fundos.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Tipografia otimizada para leitura</li>
+                        <li>Fundos personalizáveis e elegantes</li>
+                        <li>Ajuste de fonte e blur em tempo real</li>
+                        <li>Modo tela preta instantâneo</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="/mnt/user-data/uploads/1765317914374_image.png" alt="Projeção">
+                </div>
+            </div>
+
+            <!-- Feature 4: Busca Bíblica -->
+            <div class="feature">
+                <div class="feature-content">
+                    <h3 class="feature-title">Busca Bíblica Integrada</h3>
+                    <p class="feature-description">
+                        Projete versículos bíblicos com facilidade. Busca rápida 
+                        por livro, capítulo e versículo com múltiplas traduções.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Busca por referência (Ex: João 3:16)</li>
+                        <li>Múltiplas versões da Bíblia (ARC, NVI, etc)</li>
+                        <li>Histórico de versículos usados</li>
+                        <li>Navegação rápida entre capítulos</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="/mnt/user-data/uploads/1765317922841_image.png" alt="Busca Bíblica">
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Baixe letras e imagens da internet</h2>
+            <p>Interface intuitiva. Tenha tudo à mão</p>
+            <a href="#" class="cta-button">Download para Windows</a>
+        </section>
+
+        <!-- Facilidade de Uso -->
+        <section class="ease-section" style="padding: 100px 0; text-align: center;">
+            <h2 style="font-size: 42px; font-weight: 700; margin-bottom: 60px;">Fácil de Usar</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1200px; margin: 0 auto;">
+                <div style="text-align: left;">
+                    <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 12px;">Descomplicado</h3>
+                    <p style="color: #9CA3AF; font-size: 16px;">Interface intuitiva. Tenha tudo à mão</p>
+                    <h3 style="font-size: 24px; font-weight: 600; margin-top: 32px; margin-bottom: 12px;">Poderoso</h3>
+                    <p style="color: #9CA3AF; font-size: 16px;">Apresentações mais impactantes</p>
+                </div>
+                <div style="border-radius: 24px; overflow: hidden; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);">
+                    <img src="/mnt/user-data/uploads/1765317879369_image.png" style="width: 100%; display: block;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Suporte Premium -->
+        <section class="support-section" style="padding: 100px 0; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border-radius: 32px; margin: 100px 0; text-align: center;">
+            <h2 style="font-size: 42px; font-weight: 700; margin-bottom: 24px;">Suporte Premium</h2>
+            <p style="font-size: 18px; color: #9CA3AF; margin-bottom: 40px;">Equipe pronta para ajudar - 7 dias por semana</p>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <a href="#" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; background: #25D366; color: white; text-decoration: none; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">
+                    <span>WhatsApp</span>
+                </a>
+                <a href="#" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; background: #3B82F6; color: white; text-decoration: none; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">
+                    <span>Fale Conosco</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Impressione -->
+        <section style="text-align: center; padding: 80px 0;">
+            <h2 style="font-size: 48px; font-weight: 700; margin-bottom: 16px; color: #EF4444;">Impressione</h2>
+            <p style="font-size: 20px; color: #9CA3AF; margin-bottom: 24px;">Experimente Hoje mesmo</p>
+            <p style="font-size: 18px; color: #9CA3AF; max-width: 600px; margin: 0 auto;">Eleve a experiência de projeção</p>
+            <p style="font-size: 16px; color: #10B981; margin-top: 32px; font-weight: 600;">Grátis sem compromisso</p>
+            <a href="#" class="cta-button" style="margin-top: 32px;">Download Gratuito</a>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2025 CADEALT MASTER - Sistema de Projeção para Igrejas</p>
+            <p>Desenvolvido com ❤️ para igrejas brasileiras</p>
+        </footer>
+    </div>
+
+    <script>
+        // Intersection Observer para animações
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature, .stat-card').forEach(el => {
+            el.classList.add('animate-in');
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
